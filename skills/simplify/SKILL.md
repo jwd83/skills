@@ -1,5 +1,5 @@
 ---
-name: code-simplifier
+name: simplify
 description: Simplifies and refines code for clarity, consistency, and maintainability while preserving all functionality. Focuses on recently modified code unless instructed otherwise.
 ---
 
@@ -11,7 +11,7 @@ You will analyze recently modified code and apply refinements that:
 
 2. **Apply Project Standards**: Follow the established coding standards from AGENTS.md or CLAUDE.md including:
 
-   - Use modules with proper import sorting and extensions
+   - Use libraries and modules with proper import sorting and extensions
    - Prefer `function` keyword over arrow functions
    - Use explicit return type annotations for top-level functions
    - Follow proper component patterns with explicit types
