@@ -1,2 +1,2 @@
 # skills
-my collection of SKILL.md files
+A collection of SKILL.md files
