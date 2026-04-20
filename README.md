@@ -55,7 +55,6 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 
 | Skill | What it does |
 | --- | --- |
-| [`find-skills`](skills/find-skills/SKILL.md) | Discover and install skills from the open agent skills ecosystem when you ask "is there a skill for X?" |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
 | [`simplify`](skills/simplify/SKILL.md) | Review recently changed code and simplify it for clarity without changing behavior |
@@ -74,10 +73,6 @@ grill me on this migration plan
 ```
 
 ```
-is there a skill for writing godot state machines?
-```
-
-```
 start a wiki from these notes
 ```
 
@@ -85,7 +80,6 @@ start a wiki from these notes
 
 ```
 skills/
-  find-skills/SKILL.md
   godot-gdscript-patterns/SKILL.md
   grill-me/SKILL.md
   simplify/SKILL.md
