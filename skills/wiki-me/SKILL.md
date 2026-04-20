@@ -1,6 +1,6 @@
 ---
 name: wiki-me
-description: build or extend the wiki in the style of Andrej
+description: Build or extend a personal wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from your sources. Use when the user wants to start a wiki, add new sources, or synthesize notes into a living knowledge base rather than one-off RAG.
 ---
 
 A pattern for building personal knowledge bases using LLMs.
