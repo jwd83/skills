@@ -28,6 +28,29 @@ Install into a specific agent (e.g. Claude Code):
 npx skills add jwd83/skills -a claude-code
 ```
 
+## Manage
+
+List what's currently installed:
+
+```bash
+npx skills list
+```
+
+Update installed skills to the latest versions:
+
+```bash
+npx skills update
+```
+
+Remove skills interactively, or target one by name:
+
+```bash
+npx skills remove
+npx skills remove --skill simplify
+```
+
+Most commands accept `-g` for global (user-level) scope and `-a <agent>` to target a specific agent. Run `npx skills --help` for the full list.
+
 ## Skills
 
 | Skill | What it does |
