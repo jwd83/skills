@@ -1,9 +1,9 @@
 ---
 name: wiki-me
-description: Build or extend a personal wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from your sources. Use when the user wants to start a wiki, add new sources, or synthesize notes into a living knowledge base rather than one-off RAG.
+description: Build or extend a project wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from your sources. Use when the user wants to start a wiki, add new sources, or synthesize notes into a living knowledge base rather than one-off RAG.
 ---
 
-A pattern for building personal knowledge bases using LLMs.
+A pattern for building project knowledge bases using LLMs.
 
 This is an idea file, it is designed to be copy pasted to your own LLM Agent (e.g. OpenAI Codex, Claude Code, OpenCode / Pi, or etc.). Its goal is to communicate the high level idea, but your agent will build out the specifics in collaboration with you.
 
