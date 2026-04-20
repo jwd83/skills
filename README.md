@@ -1,9 +1,5 @@
 # My Skills
 
-My collection of SKILL.md files. To manage the installation of said tools use the following command.
+My collection of SKILL.md files
 
-    uv run install.py
-
-To fetch the latest toolset 
-
-    git pull
+https://github.com/jwd83/skills
