@@ -57,7 +57,9 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 | --- | --- |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
+| [`next-step`](skills/next-step/SKILL.md) | Resume in-progress work, find the next defensible implementation step, make it, and sync docs/tests |
 | [`simplify`](skills/simplify/SKILL.md) | Review recently changed code and simplify it for clarity without changing behavior |
+| [`system-verilog-expert`](skills/system-verilog-expert/SKILL.md) | SystemVerilog / RTL design guidance with synthesis, lint, CDC, and tool-flow-aware patterns |
 | [`wiki-me`](skills/wiki-me/SKILL.md) | Build and maintain a persistent, interlinked markdown wiki from your sources |
 
 ## Examples
@@ -66,6 +68,10 @@ Once installed, invoke a skill by its name or by describing what you want:
 
 ```
 /simplify
+```
+
+```
+/next-step
 ```
 
 ```
@@ -82,7 +88,9 @@ start a wiki from these notes
 skills/
   godot-gdscript-patterns/SKILL.md
   grill-me/SKILL.md
+  next-step/SKILL.md
   simplify/SKILL.md
+  system-verilog-expert/SKILL.md
   wiki-me/SKILL.md
 ```
 
