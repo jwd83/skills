@@ -17,6 +17,7 @@ Optimize for a stable game loop, clear separation of update/draw/input concerns,
 Before editing a pygame project, inspect:
 
 - Python/project tooling: `pyproject.toml`, `uv.lock`, `.python-version`, test config, run scripts.
+- Which pygame package: `pygame` (original) or `pygame-ce` (the actively maintained community fork). They share the `import pygame` namespace and are largely API-compatible, but versions and bug fixes diverge. Do not mix both in one project.
 - Entry point: where `pygame.init()`, `display.set_mode()`, and the main loop are called.
 - Game loop: event handling, update timing, drawing, `display.flip()`/`update()`, and `Clock.tick()`.
 - Asset loading: image, sound, font, map, and data paths.
@@ -98,6 +99,8 @@ if keys[pygame.K_LEFT]:
 
 Avoid scattering direct keyboard checks across many unrelated objects. Prefer a small input layer or pass actions to objects that need them.
 
+For projects with high event volume (mouse motion, joystick axes), filter what the queue carries with `pygame.event.set_blocked(...)` and `set_allowed(...)` during scene setup so the loop spends less time iterating events the game does not consume.
+
 ## Scene and State Patterns
 
 Use explicit scenes/states for major modes:
@@ -108,14 +111,20 @@ Use explicit scenes/states for major modes:
 - `GameOverScene`
 - `SettingsScene`
 
-A scene typically owns its sprites, UI elements, and transition decisions:
+A scene typically owns its sprites, UI elements, and transition decisions. Give scenes a reference to the application and an explicit transition signal so the main loop can swap them without scenes touching each other directly:
 
 ```python
 class Scene:
+    def __init__(self, game: "Game") -> None:
+        self.game = game
+        self.next_scene: Scene | None = None
+
     def handle_events(self, events: list[pygame.event.Event]) -> None: ...
     def update(self, dt: float) -> None: ...
     def draw(self, surface: pygame.Surface) -> None: ...
 ```
+
+In `Game.run()`, after `update`, check `self.scene.next_scene` and swap if set. This keeps transitions explicit and avoids scenes constructing their successors at arbitrary points during update or draw.
 
 Avoid one giant `while running` loop with hundreds of branches for every menu and game mode.
 
@@ -195,6 +204,54 @@ Keep collision detection separate from collision response when it improves clari
 - Keep music streaming separate from short sound effects.
 - Avoid blocking loads during gameplay.
 
+## Camera and Viewport
+
+For scrolling games, keep world coordinates separate from screen coordinates and apply a single offset at draw time.
+
+```python
+class Camera:
+    def __init__(self, view_size: tuple[int, int]) -> None:
+        self.offset = pygame.Vector2(0, 0)
+        self.view = pygame.Rect((0, 0), view_size)
+
+    def follow(self, target: pygame.Vector2) -> None:
+        self.offset.x = target.x - self.view.width / 2
+        self.offset.y = target.y - self.view.height / 2
+
+    def apply(self, world_rect: pygame.Rect) -> pygame.Rect:
+        return world_rect.move(-self.offset.x, -self.offset.y)
+```
+
+Guidelines:
+
+- Sprites store world position; the camera produces screen rects only at draw time.
+- Cull off-screen sprites before drawing (`self.view.colliderect(sprite.rect)`) for large levels.
+- Clamp the camera to level bounds to avoid revealing empty space.
+- Avoid letting individual sprites read or mutate camera state; pass the camera (or an offset) into `draw`.
+
+## Profiling and Performance Debugging
+
+Before optimizing or refactoring for performance, measure. Pygame projects usually have a small number of hot paths and many cheap ones.
+
+Quick tools:
+
+- On-screen FPS overlay using `clock.get_fps()` rendered to a cached `Surface` (re-render only when the value's integer part changes).
+- `cProfile` for a representative gameplay run: `uv run python -m cProfile -o game.prof -m my_game`, then inspect with `snakeviz game.prof` or `python -m pstats game.prof`.
+- `time.perf_counter()` deltas around suspect sections inside the loop, gated by a debug flag.
+- `pygame.time.get_ticks()` for coarse millisecond timing of game events.
+
+Common pygame hot spots to check first:
+
+- Surfaces blitted without `convert()`/`convert_alpha()` (large, hidden cost).
+- `pygame.transform.scale`/`rotate`/`smoothscale` called per frame on the same source — cache results keyed by parameters.
+- `pygame.font.Font.render` called per frame for text whose value rarely changes.
+- Pixel-perfect mask collision when a rect or radius check would suffice.
+- Linear scans over large sprite groups for collision; broad-phase by zone or rect first.
+- Loading audio or images inside `update`/`draw` paths.
+- `pygame.event.get()` ignoring the value but pumping huge motion event volume — block what is not used.
+
+Lock perf-relevant choices into the architecture rather than scattering optimizations: load and convert assets at boundaries, cache transforms in the asset layer, and keep the per-frame path doing only blit/update math.
+
 ## UI and Text
 
 - Cache static rendered text surfaces.
@@ -251,19 +308,14 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-For uv projects, add pygame with:
+For uv projects, add the chosen package explicitly:
 
 ```bash
-uv add pygame
+uv add pygame      # original
+uv add pygame-ce   # community fork (actively maintained)
 ```
 
-If using pygame-ce instead of pygame, be explicit and consistent:
-
-```bash
-uv add pygame-ce
-```
-
-Do not depend on both unless the project has a deliberate compatibility reason.
+Pick one. The two share the `pygame` import name but ship different versions; mixing them produces subtle bugs.
 
 ## Common Pygame Antipatterns
 
@@ -295,6 +347,21 @@ Avoid:
 - Move collision code into focused helpers or systems.
 - Preserve public run commands and save/data formats while reorganizing internals.
 - Add pure tests around logic before changing gameplay behavior.
+
+## Refactoring a Large Pygame Project
+
+For codebases beyond a few thousand lines, work in this order. Each step lands a clean diff and unblocks the next without changing observable behavior.
+
+1. **Pin behavior first.** Run the game, capture the boot path, and write characterization tests around any pure logic you can extract today (scoring, level parsing, save/load, AI decisions). Without these, large refactors regress silently.
+2. **Profile before restructuring.** Run a representative session under `cProfile`, look at the top 10 functions by cumulative time, and note any `convert()` misses, per-frame transforms, and per-frame text renders. Refactoring blind to hot paths often makes them worse.
+3. **Hoist `pygame.init()` and `display.set_mode()` to a single boundary.** Many large projects have init scattered across modules and at import time; consolidate before anything else, otherwise every later refactor fights load order.
+4. **Introduce a `Game` object and an explicit scene interface** before splitting files. Move the existing main loop's branches into named scenes one at a time. Keep the old code path callable until the last branch is moved.
+5. **Centralize asset loading** behind a loader that caches converted surfaces, fonts, and sounds. Replace ad-hoc `pygame.image.load` calls with the loader file by file. This usually deletes substantial duplicated code.
+6. **Separate world state from rendering.** If sprites currently draw themselves using globals, give `draw(surface, camera)` an explicit signature and pass the camera/offset through. This is the change that unlocks future scene splits, headless tests, and editor tooling.
+7. **Split the god file last, not first.** Once boundaries above are clean, move modules along the seams already present (scenes/, entities/, systems/, ui/, assets/). Splitting before the seams exist creates a tangle of cross-module imports.
+8. **Verify each step.** Run the game and the focused tests after every move. With pygame, a regression is often a missing `convert_alpha()`, a swallowed event, or a frame-rate-dependent jump that only shows on someone else's machine — catch these one change at a time.
+
+Avoid: rewriting the loop and the asset pipeline and the scene system in one branch. The diff becomes unreviewable and bisecting regressions becomes painful.
 
 ## Review Checklist
 
