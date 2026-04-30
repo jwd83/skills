@@ -8,59 +8,43 @@ license: MIT
 
 ## Purpose
 
-Refactor Python code safely and idiomatically while preserving behavior. Optimize for readability, simple module boundaries, explicit contracts, good tests, and maintainable Python. Avoid importing patterns from other ecosystems wholesale when simpler Python fits better.
+Refactor Python code safely and idiomatically while preserving behavior. Optimize for readable code, simple module boundaries, explicit contracts, useful tests, and maintainable Python. Avoid importing patterns from other ecosystems when simple functions, modules, dataclasses, protocols, or standard-library tools fit better.
 
-Treat refactoring as controlled evolution: understand first, protect behavior with tests or characterization checks, make the smallest safe change, verify, then repeat.
-
-## When to Use
-
-Use this skill when the user asks to:
-
-- Refactor, clean up, simplify, reorganize, or improve maintainability of Python code.
-- Reduce duplication or coupling between Python modules.
-- Rename confusing functions, variables, modules, types, or concepts.
-- Break down large functions, classes, modules, or packages.
-- Improve boundaries between layers (domain, infrastructure, CLI, framework adapters).
-- Add tests around existing Python behavior before changing internals.
-- Modernize typing, dataclasses, async usage, or packaging.
-
-Do **not** use it for a rewrite, redesign, performance project, or feature addition unless the user explicitly wants refactoring as a step toward that goal.
+Use this skill for cleanup, simplification, renaming, decomposition, dependency untangling, test characterization, typing improvements, packaging cleanup, or async/data-model refactors. Do **not** treat a rewrite, redesign, feature, or performance project as a refactor unless the user explicitly asks for that scope.
 
 ## Non-Negotiables
 
-1. **Preserve behavior.** Do not mix refactoring with feature changes unless explicitly asked.
-2. **Work from evidence.** Read the code, tests, config, and call sites before changing design.
-3. **Prefer small steps.** Make one coherent refactoring at a time.
-4. **Protect behavior.** Run existing tests; add characterization tests when risk is high and tests are missing.
-5. **Keep public contracts stable.** APIs, data formats, CLI flags, exceptions, log messages, database schemas, and side effects must remain compatible unless the user approves a breaking change.
-6. **Use the project's style.** Follow existing conventions before introducing new patterns.
-7. **Avoid architecture astronautics.** Do not add abstractions until duplication, volatility, or dependency direction justifies them.
-
-## Python Refactoring Principles
-
-1. **Behavior first.** Keep public APIs, CLI behavior, exceptions, logs, return values, file formats, database queries, and side effects stable unless the user approves a change.
-2. **Prefer simple Python.** Clear functions, modules, dataclasses, protocols, and standard library tools usually beat heavy design patterns.
-3. **Respect project conventions.** Follow the repository's existing formatter, linter, type checker, test style, and package layout.
-4. **Make illegal states harder.** Use type hints, enums, dataclasses, validation at boundaries, and narrow interfaces where they clarify invariants.
-5. **Separate pure logic from effects.** Keep I/O, network, database, time, randomness, and environment access at boundaries so core logic is easy to test.
-6. **Avoid cleverness.** Readability is more important than dense comprehensions, metaprogramming, decorators, or dynamic imports.
-7. **Refactor incrementally.** One coherent change, then run focused checks.
+1. **Preserve behavior.** Keep public APIs, CLI flags, exceptions, log messages, file formats, database schemas, and side effects compatible unless the user approves a breaking change.
+2. **Work from evidence.** Read code, tests, config, docs, and call sites before changing design.
+3. **Make one coherent change at a time.** Prefer small, reviewable diffs over bundled redesigns.
+4. **Protect risky behavior.** Run existing checks; add characterization tests when coverage is missing and the refactor is not trivial.
+5. **Follow the project.** Match its Python version, formatter, linter, type checker, test style, package layout, and dependency manager.
+6. **Avoid architecture astronautics.** Add abstractions only when duplication, volatility, or dependency direction justifies them.
+7. **Do not hide behavior changes inside cleanup.** If you discover a bug, report it or fix it in a separate, explicit change.
 
 ## First Inspection Checklist
 
-Before changing Python code, inspect:
+Before editing, identify:
 
-- `pyproject.toml`, `uv.lock`, `.python-version`, `setup.cfg`, `tox.ini`, `noxfile.py`, `pytest.ini`, `.pre-commit-config.yaml`, or equivalent tooling.
-- Project manager: prefer existing workflow; if the project uses `uv`, use `uv run`, `uv add`, `uv remove`, `uv sync`, and `uv lock` instead of manually editing environments.
-- Test framework and commands: usually `pytest`, sometimes `unittest`, `tox`, `nox`, or framework-specific commands.
-- Formatter/linter/type checker: commonly `ruff`, `black`, `isort`, `mypy`, `pyright`, `basedpyright`, `pylint`.
-- Supported Python versions from `requires-python`, `.python-version`, CI, or lockfiles; do not introduce syntax or typing features unsupported by the project.
-- Public package exports: `__init__.py`, documented imports, entry points, CLIs, plugin hooks.
-- Call sites before renaming or moving symbols.
+- Tooling/config: `pyproject.toml`, `uv.lock`, `.python-version`, `setup.cfg`, `tox.ini`, `noxfile.py`, `pytest.ini`, `.pre-commit-config.yaml`, CI, or scripts.
+- Supported Python versions from `requires-python`, lockfiles, CI, docs, or runtime constraints.
+- Test/lint/type commands and whether the repo uses `pytest`, `unittest`, `tox`, `nox`, `ruff`, `black`, `isort`, `mypy`, `pyright`, `basedpyright`, or `pylint`.
+- Public contracts: documented imports, `__init__.py`, `__all__`, entry points, CLIs, plugin hooks, serialized data, exceptions, and log output.
+- Call sites before renaming, moving, or changing signatures.
+- Dependency manager. If the project uses `uv`, use that workflow rather than manual virtualenv or `pip` commands.
+
+## Safe Workflow
+
+1. **Discover baseline.** Read relevant code/config and run a focused existing check if practical. Record pre-existing failures.
+2. **Characterize when needed.** Add focused tests around current behavior before moving parsing, serialization, CLI behavior, async logic, or bug-prone code.
+3. **Refactor one seam.** Rename, extract, inline, move, or simplify one coherent concept.
+4. **Verify.** Run the narrowest useful tests/lint/type checks, expanding scope only as warranted.
+5. **Review Python hazards.** Check imports/cycles, public contracts, mutable defaults, exception behavior, async cancellation, encodings, paths, timezone/money precision, and dependency metadata.
+6. **Report clearly.** State files changed, checks run, compatibility notes, and remaining risk.
 
 ## Verification Commands
 
-Use project-defined commands first. If absent, common focused commands are:
+Use project-defined commands first. Common focused commands:
 
 ```bash
 python -m pytest path/to/test_file.py -q
@@ -69,304 +53,49 @@ python -m ruff check .
 python -m ruff format --check .
 python -m mypy package_or_module
 python -m pyright
+```
 
-# If the project uses uv, prefer the locked environment:
+For `uv` projects, prefer the locked environment:
+
+```bash
 uv run pytest path/to/test_file.py -q
 uv run ruff check .
+uv run ruff format --check .
 uv run mypy package_or_module
 uv run pyright
 uv sync --locked
-```
-
-Do not run expensive full suites without considering scope. If checks are unavailable, explain what was inspected and what remains unverified.
-
-## uv Project and Dependency Management
-
-If a Python project uses `uv`, preserve and use that workflow.
-
-### Detect uv usage
-
-Treat the project as uv-managed when you see any of:
-
-- `uv.lock`
-- `[tool.uv]` in `pyproject.toml`
-- Documentation or scripts using `uv run`, `uv sync`, `uv add`, or `uv lock`
-- A workspace layout under `[tool.uv.workspace]`
-
-### Refactoring rules for uv projects
-
-- Use `uv run <command>` for tests, linters, scripts, and CLIs so checks run in the project's resolved environment.
-- Use `uv add <package>` for runtime dependencies and `uv add --dev <package>` for development dependencies.
-- Use `uv remove <package>` when deleting a dependency.
-- Use `uv sync` to create/update the environment from `pyproject.toml` and `uv.lock`.
-- Use `uv sync --locked` or `uv lock --check` in verification when you must ensure the lockfile is current without changing it.
-- Do not hand-edit `uv.lock`.
-- Do not mix package managers casually. Avoid introducing `requirements.txt`, Poetry, Pipenv, or manual `pip install` workflows into a uv project unless the repository already uses them for a specific purpose.
-- Keep dependency groups intentional: runtime dependencies in `project.dependencies`; developer-only tools in dependency groups such as `dev`.
-- When removing imports during refactors, check whether the corresponding dependency can also be removed; only remove it if no other code, extras, docs, or entry points need it.
-- Preserve `requires-python`; do not add dependencies or syntax incompatible with the declared Python versions.
-
-### Useful uv commands
-
-```bash
-uv sync
-uv sync --locked
-uv run pytest -q
-uv run ruff check .
-uv run ruff format --check .
-uv add requests
-uv add --dev pytest ruff mypy
-uv remove requests
 uv lock --check
 ```
 
-If uv is not already used, do not migrate the project to uv as part of a refactor unless the user explicitly asks.
-
-## Refactoring Operations
-
-Use the smallest operation that solves the problem:
-
-- **Rename:** improve intent without changing behavior.
-- **Extract function/method:** isolate a coherent operation and pass only required data.
-- **Inline function/method:** remove indirection that no longer clarifies.
-- **Extract module/package:** separate unrelated responsibilities and stabilize imports.
-- **Move function/method:** put behavior with the data or dependency it primarily uses.
-- **Extract protocol/abstract base class:** introduce only at a real boundary or variation point.
-- **Introduce parameter object (dataclass):** group fields that travel together and have one meaning.
-- **Replace conditional with dispatch:** use dicts, strategies, or `match` statements when it reduces complexity.
-- **Decompose conditional:** name complex predicates and isolate branches.
-- **Replace magic literal with named constant:** clarify units and domain meaning.
-- **Encapsulate collection/state:** protect invariants while keeping simple access simple.
-- **Separate pure logic from effects:** make core behavior easier to test.
-
-## Code Smells and Refactoring Responses
-
-| Smell | Prefer | Avoid |
-| --- | --- | --- |
-| Long function | Extract cohesive steps with names that reveal intent | Splitting by arbitrary line count |
-| Large class/module | Separate responsibilities around stable concepts | Creating many tiny anemic wrappers |
-| Duplication | Extract the shared concept after confirming behavior is truly the same | Abstracting coincidental similarity |
-| Confusing names | Rename to domain terms used by callers/tests/docs | Cute abbreviations or generic names |
-| Long parameter list | Group cohesive parameters into a dataclass | Passing giant bags of unrelated data |
-| Deep nesting | Guard clauses, decomposed predicates, clearer validation flow | Obscuring control flow with clever constructs |
-| Primitive obsession | Enums, dataclasses, `NewType`, `Literal`, `TypedDict` where they enforce meaning | Heavy classes for every scalar |
-| Feature envy | Move behavior closer to the data or expose an intention-revealing method | Reaching through object internals |
-| Shotgun surgery | Centralize volatile decisions behind one module/function/type | Global registries or hidden magic |
-| Dead code | Remove unused code and tests; trust version control | Leaving commented-out alternatives |
-| Hidden side effects | Make side effects explicit at boundaries | Pretending impure code is pure |
-| Circular imports | Extract shared types/helpers to lower-level modules; use `if TYPE_CHECKING:` | Import-time hacks or runtime monkeypatching |
-
-## Python Smells and Preferred Refactorings
-
-### Large functions that mix policy and effects
-
-Prefer extracting pure helpers and passing dependencies in explicitly.
-
-```python
-# Better shape
-def build_invoice(order: Order, rates: Rates) -> Invoice:
-    ...  # pure calculation
-
-
-def send_invoice(order_id: str, repo: OrderRepository, mailer: Mailer) -> None:
-    order = repo.get(order_id)
-    invoice = build_invoice(order, repo.current_rates())
-    mailer.send(invoice)
-```
-
-Avoid hiding I/O in helpers named like pure calculations.
-
-### Mutable default arguments
-
-Replace mutable defaults with `None` sentinels or `default_factory`.
-
-```python
-def add_tag(tag: str, tags: list[str] | None = None) -> list[str]:
-    tags = [] if tags is None else tags
-    tags.append(tag)
-    return tags
-```
-
-For dataclasses:
-
-```python
-from dataclasses import dataclass, field
-
-@dataclass
-class User:
-    tags: list[str] = field(default_factory=list)
-```
-
-### Primitive obsession
-
-Use lightweight domain types when they enforce meaning.
-
-- `Enum`/`StrEnum` for closed sets.
-- `dataclass(frozen=True)` for small value objects.
-- `NewType` for static distinction with no runtime overhead.
-- `Literal` for narrow public options.
-- `TypedDict` for dict-shaped external data.
-- Pydantic/attrs only when already used by the project or needed at validation boundaries.
-
-Avoid building boilerplate getter/setter classes around simple data.
-
-### Dicts carrying structured data everywhere
-
-Prefer a dataclass, `NamedTuple`, `TypedDict`, or existing model depending on mutability and boundary needs.
-
-```python
-from dataclasses import dataclass
-from decimal import Decimal
-
-@dataclass(frozen=True, slots=True)
-class Money:
-    amount: Decimal
-    currency: str
-```
-
-Use `slots=True` only when supported and beneficial; avoid changing pickling/attribute behavior for public classes without care.
-
-### Long parameter lists
-
-Group cohesive values into dataclasses/config objects, but avoid untyped catch-all config bags.
-
-```python
-@dataclass(frozen=True)
-class RetryPolicy:
-    attempts: int
-    timeout_seconds: float
-    backoff_seconds: float
-```
-
-### Deep nesting and complex conditionals
-
-Use guard clauses, named predicates, or `match` only when clearer and supported by the Python version.
-
-```python
-def process(user: User | None) -> Result:
-    if user is None:
-        return Result.error("missing user")
-    if not user.is_active:
-        return Result.error("inactive user")
-    return process_active_user(user)
-```
-
-### Broad exceptions and swallowed errors
-
-Avoid bare `except:` and broad `except Exception` unless intentionally isolating a boundary. Preserve exception behavior during refactors.
-
-```python
-try:
-    payload = json.loads(raw)
-except json.JSONDecodeError as exc:
-    raise InvalidPayloadError("invalid JSON") from exc
-```
-
-### Resource management
-
-Use context managers for files, locks, temporary directories, database sessions, and network clients.
-
-```python
-from pathlib import Path
-
-with Path(path).open(encoding="utf-8") as file:
-    data = file.read()
-```
-
-Prefer `pathlib.Path` for new internal path manipulation unless the project consistently uses strings or APIs require strings.
-
-### Import-time side effects
-
-Do not perform expensive I/O, network calls, logging configuration, environment mutation, or argument parsing at import time. Move script behavior under:
-
-```python
-def main() -> int:
-    ...
-    return 0
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-### Global state and hidden dependencies
-
-Prefer explicit dependency injection for time, randomness, clients, repos, and configuration. Use module constants for true constants only.
-
-### Inheritance-heavy designs
-
-Prefer composition, simple functions, or `typing.Protocol` over deep inheritance when behavior varies.
-
-```python
-from typing import Protocol
-
-class Notifier(Protocol):
-    def send(self, message: str) -> None: ...
-```
-
-Use abstract base classes when runtime registration or shared implementation is genuinely needed.
-
-### Overuse of classes
-
-If a class has no state or invariant, a module-level function may be clearer. If a module has many functions manipulating the same state shape, a dataclass or class may be appropriate.
-
-### Boolean flags controlling many branches
-
-Split into clearer functions or use strategies. Preserve the public API by keeping the flag wrapper if needed.
-
-```python
-def render_text(report: Report) -> str: ...
-def render_html(report: Report) -> str: ...
-```
-
-### Large comprehensions
-
-Use comprehensions for simple transformations. Extract loops when filtering, transformation, side effects, or error handling become hard to read.
-
-### Time, money, and precision
-
-- Use timezone-aware datetimes for real-world timestamps.
-- Prefer `datetime.UTC` where supported; otherwise use `datetime.timezone.utc`.
-- Use `Decimal` for money and exact decimal calculations.
-- Do not replace `Decimal` with `float` during cleanup.
-
-### Async code
-
-- Preserve sync/async public contracts.
-- Do not call blocking I/O directly inside async functions; use async libraries or executors.
-- Use `asyncio.TaskGroup` only when supported by the Python version.
-- Preserve cancellation behavior; do not swallow `asyncio.CancelledError`.
-- Keep event loop creation at application boundaries.
-
-## Typing Guidance
-
-Add or improve type hints when they clarify contracts and the project supports typing.
-
-Prefer:
-
-- Built-in generics: `list[str]`, `dict[str, int]` when supported.
-- `collections.abc` for accepted interfaces: `Iterable`, `Sequence`, `Mapping`, `Callable`.
-- `Protocol` for structural interfaces at boundaries.
-- `TypeAlias` for complex repeated types.
-- `Self`, `override`, `assert_never` only when supported by the configured Python/type-checker version.
-- `object` instead of `Any` when callers must narrow.
-
-Be careful:
-
-- Do not add types that lie or require invasive rewrites.
-- Avoid `cast()` unless the invariant is documented nearby.
-- Avoid weakening typed code with `Any`.
-- If using `from __future__ import annotations`, match project style and Python version needs.
-- Keep runtime imports and type-only imports separate with `if TYPE_CHECKING:` when needed to avoid cycles.
-
-## Module and Package Boundaries
-
-When moving Python code:
-
-- Preserve documented imports and public names.
-- Update `__all__` if the project uses it.
-- Avoid creating circular imports; move shared types/helpers to lower-level modules only when justified.
-- Keep CLI, framework adapters, and infrastructure separate from domain logic where practical.
-- Use compatibility re-exports for moved public APIs when callers may depend on old paths.
+Do not run expensive full suites casually. If checks cannot run, explain what was inspected and what remains unverified.
+
+## uv Projects
+
+Treat a repo as uv-managed when you see `uv.lock`, `[tool.uv]`, `[tool.uv.workspace]`, or docs/scripts using `uv run`, `uv sync`, `uv add`, or `uv lock`.
+
+- Run tools with `uv run <command>`.
+- Add/remove dependencies with `uv add`, `uv add --dev`, and `uv remove`.
+- Use `uv sync` to create/update the environment; use `uv sync --locked` or `uv lock --check` to verify without changing the lockfile.
+- Do not hand-edit `uv.lock`.
+- Do not introduce Poetry, Pipenv, `requirements.txt`, or manual `pip install` workflows into a uv project unless the repo already uses them for a specific purpose.
+- Keep runtime dependencies in `project.dependencies` and dev-only tools in dependency groups.
+- When removing imports, remove the corresponding dependency only after checking all code, extras, docs, and entry points.
+- Preserve `requires-python`; do not add syntax or dependencies incompatible with it.
+
+If uv is not already used, do not migrate to uv as part of a refactor unless asked.
+
+## Refactoring Moves
+
+Use the smallest move that clarifies the code:
+
+- **Rename** confusing modules, functions, variables, types, or concepts after checking call sites.
+- **Extract** cohesive functions/methods/modules from large blocks; pass only required data.
+- **Inline** indirection that no longer earns its name.
+- **Move** behavior closer to the data or dependency it primarily uses.
+- **Separate pure logic from effects** so I/O, network, database, time, randomness, and environment access sit at boundaries.
+- **Introduce dataclasses/enums/protocols/type aliases** only when they clarify invariants or stabilize a boundary.
+- **Decompose conditionals** with guard clauses, named predicates, or dispatch when that is clearer and supported by the Python version.
+- **Add compatibility re-exports** when moving public names that callers may import from old paths.
 
 Example compatibility shim:
 
@@ -377,92 +106,107 @@ from .new_module import useful_function
 __all__ = ["useful_function"]
 ```
 
-## Testing Guidance for Python Refactors
+## Smells and Preferred Responses
 
-Prefer focused tests that lock current behavior before changing internals.
+| Smell | Prefer | Avoid |
+| --- | --- | --- |
+| Long function | Extract named, cohesive steps | Splitting by arbitrary line count |
+| Large class/module | Separate stable responsibilities | Many tiny anemic wrappers |
+| Duplication | Extract the shared concept after confirming behavior matches | Abstracting coincidental similarity |
+| Confusing names | Use domain terms from callers/tests/docs | Cute abbreviations or generic names |
+| Long parameter list | Group cohesive values into a dataclass/config object | Giant untyped bags of unrelated data |
+| Deep nesting | Guard clauses and named predicates | Clever control flow that hides branches |
+| Primitive obsession | `Enum`, `Literal`, `NewType`, `TypedDict`, or dataclasses when they enforce meaning | Heavy classes for every scalar |
+| Hidden side effects | Make dependencies explicit at boundaries | Helpers that look pure but perform I/O |
+| Circular imports | Move shared types/helpers lower; use `if TYPE_CHECKING:` | Import-time hacks or monkeypatching |
+| Dead private code | Remove it and any tests that only covered it | Deleting public behavior tests or leaving commented alternatives |
 
-- Use `pytest` fixtures and parametrization for repeated cases.
-- Use `tmp_path` for filesystem tests.
-- Use `monkeypatch` for environment variables and targeted dependency replacement.
-- Use `capsys`/`caplog` for stdout/stderr/logging behavior.
-- Use `unittest.mock` sparingly and assert behavior, not implementation details.
-- Consider Hypothesis/property tests for parsers, serializers, validators, and numeric invariants if already in use or appropriate.
-- Keep tests deterministic: control time, randomness, locale, filesystem, and network.
+## Python-Specific Guidance
 
-For legacy code without tests, add characterization tests around public behavior before extraction or movement.
+### Data and state
 
-## Tooling and Style
+- Use mutable defaults safely: `None` sentinels or `dataclasses.field(default_factory=...)`.
+- Prefer dataclasses, `NamedTuple`, `TypedDict`, or existing models for dict-shaped structured data; choose based on mutability and boundary needs.
+- Use `slots=True` only when supported and safe for public classes; it can affect dynamic attributes, inheritance, and pickling.
+- Avoid boilerplate getter/setter classes. Use plain attributes or properties with real invariants.
+- Prefer composition, functions, or `typing.Protocol` over deep inheritance unless runtime registration or shared implementation is needed.
 
-Follow the repository's tools. In uv-managed projects, run tools through `uv run` and modify dependencies with `uv add`/`uv remove` rather than ad hoc virtualenv or pip commands. If choosing defaults for a small unconfigured project:
+### Imports, modules, and packaging
 
-- Format with `ruff format` or `black`, not both unless configured.
-- Lint with `ruff check`.
-- Type-check with `mypy` or `pyright` if the project already uses one.
-- Keep imports sorted according to the configured tool.
-- Follow PEP 8 naming: `snake_case` functions/variables, `PascalCase` classes, `UPPER_CASE` constants.
-- Use PEP 257 docstrings for public modules/classes/functions when docs add value; do not restate obvious code.
+- Avoid import-time side effects: expensive I/O, network calls, logging configuration, environment mutation, argument parsing, or display/database initialization.
+- Move script bodies behind `main()` and return exit codes:
 
-## Common Python Refactoring Moves
+```python
+def main() -> int:
+    ...
+    return 0
 
-- Extract pure function from method or script.
-- Move script body into `main()` and return an exit code.
-- Replace ad hoc tuples/dicts with dataclasses or typed dicts.
-- Replace string status codes with enums where the domain is closed.
-- Replace repeated path string operations with `pathlib.Path`.
-- Replace manual open/close with context managers.
-- Replace duplicated validation with a named validator function or model boundary.
-- Replace deep mocks with dependency injection and lightweight fakes.
-- Replace inheritance with composition or protocols.
-- Split framework adapters from domain services.
-- Add compatibility re-export after moving a public function/class.
-- Narrow overly broad exception handling.
-- Introduce constants for units, limits, and domain values.
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+- Preserve documented import paths, entry points, and `__all__`.
+- Keep CLI/framework adapters and infrastructure separate from domain logic where practical.
+
+### Resources and external effects
+
+- Use context managers for files, locks, temporary directories, database sessions, and network clients.
+- Prefer `pathlib.Path` for new internal path handling unless project style or APIs favor strings.
+- Specify encodings for text files when behavior should be stable.
+- Make time, randomness, clients, repositories, and configuration explicit dependencies when that improves testability.
+
+### Exceptions and errors
+
+- Preserve public exception types/messages during refactors.
+- Avoid bare `except:` and broad `except Exception` unless intentionally isolating a boundary.
+- Chain exceptions when translating errors: `raise DomainError(...) from exc`.
+- Do not swallow `asyncio.CancelledError`; preserve cancellation behavior.
+
+### Typing
+
+Add or improve types when they clarify contracts and the project supports typing.
+
+- Prefer built-in generics (`list[str]`) when supported and `collections.abc` interfaces (`Iterable`, `Sequence`, `Mapping`, `Callable`) for accepted inputs.
+- Use `Protocol` for structural boundaries, `TypeAlias` for repeated complex types, and `object` instead of `Any` when callers must narrow.
+- Use `Self`, `override`, `assert_never`, `match`, `StrEnum`, or `datetime.UTC` only when the configured Python/type-checker version supports them, or when the project already uses compatible backports.
+- Avoid lying annotations, invasive typing rewrites, unnecessary `cast()`, and weakening typed code with `Any`.
+- Separate runtime imports from type-only imports with `if TYPE_CHECKING:` when needed to avoid cycles.
+
+### Async, precision, and performance-sensitive behavior
+
+- Preserve sync/async public contracts.
+- Do not call blocking I/O directly inside async functions; use async libraries or executors.
+- Keep event loop creation at application boundaries.
+- Use timezone-aware datetimes for real-world timestamps.
+- Use `Decimal` for money/exact decimal calculations; do not replace it with `float` during cleanup.
+- Do not optimize blindly. Measure first if performance is the goal or a hot path is being changed.
+
+## Testing Guidance
+
+- Prefer focused tests that lock current behavior before changing internals.
+- Use `pytest` fixtures/parametrization, `tmp_path`, `monkeypatch`, `capsys`, and `caplog` when they fit.
+- Use mocks sparingly; assert externally visible behavior rather than implementation details.
+- Keep tests deterministic by controlling time, randomness, locale, filesystem, and network.
+- Consider property tests for parsers, serializers, validators, and numeric invariants when already in use or clearly valuable.
 
 ## Anti-Patterns to Avoid
 
-- Over-engineering simple Python with builder chains, interface-per-class designs, or excessive callbacks.
-- Adding design patterns just because a conditional exists.
-- Turning every function into a class.
-- Adding getters/setters that do nothing; use attributes/properties idiomatically.
-- Using mutable module globals for hidden configuration.
 - Refactoring by formatting the whole repository unless requested.
-- Changing public exception types/messages casually; tests and users may depend on them.
-- Replacing simple readable loops with dense comprehensions.
+- Mixing unrelated cleanup with feature work or bug fixes.
+- Adding design patterns because a conditional exists.
+- Turning every function into a class or every scalar into a value object.
+- Replacing readable loops with dense comprehensions.
 - Introducing optional dependencies for small standard-library tasks.
-- Moving code without checking imports, entry points, docs, and `__all__`.
-
-## Safety Checklist
-
-Before editing:
-
-- [ ] I know the public behavior and call sites.
-- [ ] I know how to run at least one relevant verification command.
-- [ ] I have identified one small refactoring, not a bundle of unrelated changes.
-
-After editing:
-
-- [ ] Public APIs, exceptions, log messages, and data formats are unchanged or compatibility is preserved.
-- [ ] Tests/checks were run, or limitations are clearly stated.
-- [ ] Names and module boundaries are clearer.
-- [ ] Complexity moved down, not sideways.
-- [ ] No unrelated formatting or feature work was introduced.
-
-## Safe Python Refactoring Workflow
-
-1. **Discover tooling and Python version.** Read config, including `pyproject.toml`, `uv.lock`, and `.python-version` when present, before writing syntax.
-2. **Run focused baseline checks.** Record failing tests before editing.
-3. **Add characterization coverage if needed.** Especially for parsing, serialization, CLI, or bug-prone logic.
-4. **Make one refactoring.** Keep public behavior stable.
-5. **Run focused tests/lint/type checks.** Expand only as warranted.
-6. **Review diff for Python-specific hazards:** imports, cycles, mutable defaults, exception behavior, async cancellation, encoding, path handling, timezone/Decimal precision.
-7. **Report clearly.** Mention files changed, checks run, and any remaining risk.
+- Moving code without checking imports, entry points, docs, and compatibility exports.
+- Changing public exception/log/message/data behavior casually.
+- Hiding mutable configuration in module globals.
 
 ## Final Response Checklist
 
-When reporting to the user, include:
+When reporting back, include:
 
-- What Python-specific issue was addressed.
+- What refactoring was done and why.
 - Files changed.
 - Tests/checks run and outcomes.
-- Any compatibility shims or public API preservation notes.
-- Any follow-up that should be done separately.
+- Compatibility notes for moved or public APIs.
+- Follow-up work that should remain separate.
