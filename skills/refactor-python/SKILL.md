@@ -14,7 +14,7 @@ Use this skill for cleanup, simplification, renaming, decomposition, dependency 
 
 ## Non-Negotiables
 
-1. **Preserve behavior.** Keep public APIs, CLI flags, exceptions, log messages, file formats, database schemas, and side effects compatible unless the user approves a breaking change.
+1. **Preserve behavior.** Keep public APIs, CLI flags, exceptions, log messages, file formats, ordering, database schemas, and side effects compatible unless the user approves a breaking change.
 2. **Work from evidence.** Read code, tests, config, docs, and call sites before changing design.
 3. **Make one coherent change at a time.** Prefer small, reviewable diffs over bundled redesigns.
 4. **Protect risky behavior.** Run existing checks; add characterization tests when coverage is missing and the refactor is not trivial.
@@ -27,6 +27,7 @@ Use this skill for cleanup, simplification, renaming, decomposition, dependency 
 Before editing, identify:
 
 - Tooling/config: `pyproject.toml`, `uv.lock`, `.python-version`, `setup.cfg`, `tox.ini`, `noxfile.py`, `pytest.ini`, `.pre-commit-config.yaml`, CI, or scripts.
+- Working tree and recent changes: `git status`, `git diff`, and relevant recent tests when available.
 - Supported Python versions from `requires-python`, lockfiles, CI, docs, or runtime constraints.
 - Test/lint/type commands and whether the repo uses `pytest`, `unittest`, `tox`, `nox`, `ruff`, `black`, `isort`, `mypy`, `pyright`, `basedpyright`, or `pylint`.
 - Public contracts: documented imports, `__init__.py`, `__all__`, entry points, CLIs, plugin hooks, serialized data, exceptions, and log output.
@@ -39,7 +40,7 @@ Before editing, identify:
 2. **Characterize when needed.** Add focused tests around current behavior before moving parsing, serialization, CLI behavior, async logic, or bug-prone code.
 3. **Refactor one seam.** Rename, extract, inline, move, or simplify one coherent concept.
 4. **Verify.** Run the narrowest useful tests/lint/type checks, expanding scope only as warranted.
-5. **Review Python hazards.** Check imports/cycles, public contracts, mutable defaults, exception behavior, async cancellation, encodings, paths, timezone/money precision, and dependency metadata.
+5. **Review Python hazards.** Inspect the diff for accidental behavior changes; check imports/cycles, public contracts, mutable defaults, exception behavior, async cancellation, encodings, paths, timezone/money precision, and dependency metadata.
 6. **Report clearly.** State files changed, checks run, compatibility notes, and remaining risk.
 
 ## Verification Commands
