@@ -1,6 +1,6 @@
 ---
 name: refactor-python
-description: Python-specific refactoring skill for behavior-preserving cleanup using Python best practices. Use when refactoring Python packages, scripts, CLIs, tests, async code, data models, or APIs with attention to PEP 8/257, typing, pytest, uv project/dependency management, packaging, imports, resource handling, and idiomatic Python design.
+description: Standalone Python refactoring skill for behavior-preserving cleanup using Python best practices. Use when refactoring Python packages, scripts, CLIs, tests, async code, data models, or APIs with attention to PEP 8/257, typing, pytest, uv project/dependency management, packaging, imports, resource handling, and idiomatic Python design.
 license: MIT
 ---
 
@@ -10,7 +10,31 @@ license: MIT
 
 Refactor Python code safely and idiomatically while preserving behavior. Optimize for readability, simple module boundaries, explicit contracts, good tests, and maintainable Python. Avoid importing patterns from other ecosystems wholesale when simpler Python fits better.
 
-Use this skill together with the general `refactor` skill when the user asks to clean up or restructure Python code.
+Treat refactoring as controlled evolution: understand first, protect behavior with tests or characterization checks, make the smallest safe change, verify, then repeat.
+
+## When to Use
+
+Use this skill when the user asks to:
+
+- Refactor, clean up, simplify, reorganize, or improve maintainability of Python code.
+- Reduce duplication or coupling between Python modules.
+- Rename confusing functions, variables, modules, types, or concepts.
+- Break down large functions, classes, modules, or packages.
+- Improve boundaries between layers (domain, infrastructure, CLI, framework adapters).
+- Add tests around existing Python behavior before changing internals.
+- Modernize typing, dataclasses, async usage, or packaging.
+
+Do **not** use it for a rewrite, redesign, performance project, or feature addition unless the user explicitly wants refactoring as a step toward that goal.
+
+## Non-Negotiables
+
+1. **Preserve behavior.** Do not mix refactoring with feature changes unless explicitly asked.
+2. **Work from evidence.** Read the code, tests, config, and call sites before changing design.
+3. **Prefer small steps.** Make one coherent refactoring at a time.
+4. **Protect behavior.** Run existing tests; add characterization tests when risk is high and tests are missing.
+5. **Keep public contracts stable.** APIs, data formats, CLI flags, exceptions, log messages, database schemas, and side effects must remain compatible unless the user approves a breaking change.
+6. **Use the project's style.** Follow existing conventions before introducing new patterns.
+7. **Avoid architecture astronautics.** Do not add abstractions until duplication, volatility, or dependency direction justifies them.
 
 ## Python Refactoring Principles
 
@@ -97,6 +121,40 @@ uv lock --check
 ```
 
 If uv is not already used, do not migrate the project to uv as part of a refactor unless the user explicitly asks.
+
+## Refactoring Operations
+
+Use the smallest operation that solves the problem:
+
+- **Rename:** improve intent without changing behavior.
+- **Extract function/method:** isolate a coherent operation and pass only required data.
+- **Inline function/method:** remove indirection that no longer clarifies.
+- **Extract module/package:** separate unrelated responsibilities and stabilize imports.
+- **Move function/method:** put behavior with the data or dependency it primarily uses.
+- **Extract protocol/abstract base class:** introduce only at a real boundary or variation point.
+- **Introduce parameter object (dataclass):** group fields that travel together and have one meaning.
+- **Replace conditional with dispatch:** use dicts, strategies, or `match` statements when it reduces complexity.
+- **Decompose conditional:** name complex predicates and isolate branches.
+- **Replace magic literal with named constant:** clarify units and domain meaning.
+- **Encapsulate collection/state:** protect invariants while keeping simple access simple.
+- **Separate pure logic from effects:** make core behavior easier to test.
+
+## Code Smells and Refactoring Responses
+
+| Smell | Prefer | Avoid |
+| --- | --- | --- |
+| Long function | Extract cohesive steps with names that reveal intent | Splitting by arbitrary line count |
+| Large class/module | Separate responsibilities around stable concepts | Creating many tiny anemic wrappers |
+| Duplication | Extract the shared concept after confirming behavior is truly the same | Abstracting coincidental similarity |
+| Confusing names | Rename to domain terms used by callers/tests/docs | Cute abbreviations or generic names |
+| Long parameter list | Group cohesive parameters into a dataclass | Passing giant bags of unrelated data |
+| Deep nesting | Guard clauses, decomposed predicates, clearer validation flow | Obscuring control flow with clever constructs |
+| Primitive obsession | Enums, dataclasses, `NewType`, `Literal`, `TypedDict` where they enforce meaning | Heavy classes for every scalar |
+| Feature envy | Move behavior closer to the data or expose an intention-revealing method | Reaching through object internals |
+| Shotgun surgery | Centralize volatile decisions behind one module/function/type | Global registries or hidden magic |
+| Dead code | Remove unused code and tests; trust version control | Leaving commented-out alternatives |
+| Hidden side effects | Make side effects explicit at boundaries | Pretending impure code is pure |
+| Circular imports | Extract shared types/helpers to lower-level modules; use `if TYPE_CHECKING:` | Import-time hacks or runtime monkeypatching |
 
 ## Python Smells and Preferred Refactorings
 
@@ -372,6 +430,22 @@ Follow the repository's tools. In uv-managed projects, run tools through `uv run
 - Replacing simple readable loops with dense comprehensions.
 - Introducing optional dependencies for small standard-library tasks.
 - Moving code without checking imports, entry points, docs, and `__all__`.
+
+## Safety Checklist
+
+Before editing:
+
+- [ ] I know the public behavior and call sites.
+- [ ] I know how to run at least one relevant verification command.
+- [ ] I have identified one small refactoring, not a bundle of unrelated changes.
+
+After editing:
+
+- [ ] Public APIs, exceptions, log messages, and data formats are unchanged or compatibility is preserved.
+- [ ] Tests/checks were run, or limitations are clearly stated.
+- [ ] Names and module boundaries are clearer.
+- [ ] Complexity moved down, not sideways.
+- [ ] No unrelated formatting or feature work was introduced.
 
 ## Safe Python Refactoring Workflow
 
