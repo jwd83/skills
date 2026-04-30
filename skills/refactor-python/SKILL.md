@@ -8,7 +8,7 @@ license: MIT
 
 ## Purpose
 
-Refactor Python code safely and idiomatically while preserving behavior. Optimize for readability, simple module boundaries, explicit contracts, good tests, and maintainable Python—not for translating patterns from JavaScript, Java, or enterprise OO into Python.
+Refactor Python code safely and idiomatically while preserving behavior. Optimize for readability, simple module boundaries, explicit contracts, good tests, and maintainable Python. Avoid importing patterns from other ecosystems wholesale when simpler Python fits better.
 
 Use this skill together with the general `refactor` skill when the user asks to clean up or restructure Python code.
 
@@ -150,7 +150,7 @@ Use lightweight domain types when they enforce meaning.
 - `TypedDict` for dict-shaped external data.
 - Pydantic/attrs only when already used by the project or needed at validation boundaries.
 
-Avoid building Java-style getter/setter classes around simple data.
+Avoid building boilerplate getter/setter classes around simple data.
 
 ### Dicts carrying structured data everywhere
 
@@ -362,7 +362,7 @@ Follow the repository's tools. In uv-managed projects, run tools through `uv run
 
 ## Anti-Patterns to Avoid
 
-- Importing JavaScript/TypeScript habits into Python: builder chains for simple objects, interface-per-class designs, Promise-like abstractions, or excessive callbacks.
+- Over-engineering simple Python with builder chains, interface-per-class designs, or excessive callbacks.
 - Adding design patterns just because a conditional exists.
 - Turning every function into a class.
 - Adding getters/setters that do nothing; use attributes/properties idiomatically.
