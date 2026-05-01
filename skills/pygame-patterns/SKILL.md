@@ -1,7 +1,6 @@
 ---
 name: pygame-patterns
 description: Pygame-specific best practices, architecture patterns, and antipatterns for Python games. Use when building, refactoring, debugging, or reviewing pygame projects, including game loops, sprites, scenes/states, assets, input, collision, timing, rendering, packaging, and tests.
-license: MIT
 ---
 
 # Pygame Patterns
