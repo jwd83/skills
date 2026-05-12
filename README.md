@@ -55,6 +55,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 
 | Skill | What it does |
 | --- | --- |
+| [`clumsy-ms-paint-redraw`](skills/clumsy-ms-paint-redraw/SKILL.md) | Redraw attached images as deliberately clumsy, scribbly MS Paint-style mouse drawings on white backgrounds |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
 | [`next-step`](skills/next-step/SKILL.md) | Resume in-progress work, find the next defensible implementation step, make it, and sync docs/tests |
@@ -92,10 +93,15 @@ grill me on this migration plan
 start a wiki from these notes
 ```
 
+```
+Redraw the attached image in the most clumsy, scribbly, and utterly pathetic way possible. Use a white background, and make it look like it was drawn in MS Paint with a mouse
+```
+
 ## Layout
 
 ```
 skills/
+  clumsy-ms-paint-redraw/SKILL.md
   godot-gdscript-patterns/SKILL.md
   grill-me/SKILL.md
   next-step/SKILL.md
