@@ -55,7 +55,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 
 | Skill | What it does |
 | --- | --- |
-| [`auto-research-repo`](skills/auto-research-repo/SKILL.md) | Create, audit, maintain, ingest into, query, or draft from cumulative research repositories with raw sources, wiki synthesis, manifests, wishlists, and portable HTML publication lanes |
+| [`auto-research-repo`](skills/auto-research-repo/SKILL.md) | Create, audit, maintain, ingest into, query, or draft from cumulative research repositories with raw sources, a freeform notebook, wiki synthesis, manifests, wishlists, and portable HTML publication lanes |
 | [`clumsy-ms-paint-redraw`](skills/clumsy-ms-paint-redraw/SKILL.md) | Redraw attached images as deliberately clumsy, scribbly MS Paint-style mouse drawings on white backgrounds |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
@@ -64,7 +64,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 | [`refactor-python`](skills/refactor-python/SKILL.md) | Behavior-preserving Python refactoring with attention to PEP 8/257, typing, pytest, uv workflows, packaging, imports, resources, and idiomatic design |
 | [`simplify`](skills/simplify/SKILL.md) | Review recently changed code and simplify it for clarity without changing behavior |
 | [`system-verilog-expert`](skills/system-verilog-expert/SKILL.md) | SystemVerilog / RTL design guidance with synthesis, lint, CDC, and tool-flow-aware patterns |
-| [`wiki-me`](skills/wiki-me/SKILL.md) | Build and maintain a persistent, interlinked markdown wiki from your sources |
+| [`wiki-me`](skills/wiki-me/SKILL.md) | Build and maintain a persistent, interlinked markdown wiki from immutable sources plus a freeform notebook |
 
 ## Examples
 

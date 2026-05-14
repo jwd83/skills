@@ -1,6 +1,6 @@
 ---
 name: auto-research-repo
-description: Create, audit, maintain, ingest into, query, or draft from an auto-research repository organized around immutable raw sources, an LLM-maintained wiki, manifests, a temporary ingest tray, a source wishlist, and a portable HTML publication corpus with exploratory and treatise lanes. Use when Codex needs to author a new research repo, clean up repo instructions, process newly provided sources, consolidate research notes, turn evidence into wiki pages, create exploratory publications, or move mature wiki synthesis toward a treatise.
+description: Create, audit, maintain, ingest into, query, or draft from an auto-research repository organized around immutable raw sources, a freeform notebook or scratchpad, an LLM-maintained wiki, manifests, a temporary ingest tray, a source wishlist, and a portable HTML publication corpus with exploratory and treatise lanes. Use when Codex needs to author a new research repo, clean up repo instructions, process newly provided sources, capture rough project thoughts, consolidate research notes, turn evidence into wiki pages, create exploratory publications, or move mature wiki synthesis toward a treatise.
 ---
 
 # Auto-Research Repo
@@ -14,6 +14,7 @@ Follow a one-way pipeline:
 `raw/` -> `wiki/` -> `corpus/`
 
 - Keep `raw/` as immutable evidence: papers, datasets, scans, archives, source bundles, and provenance records.
+- Keep `notebook/` as a mutable scratchpad for rough project thoughts, hunches, outlines, dead ends, meeting notes, copied snippets, prompts, and other useful junk that is not yet evidence or synthesis.
 - Keep `wiki/` as the maintained synthesis layer: concepts, entities, source notes, evidence maps, questions, conjectures, contradictions, and paper seeds.
 - Keep `corpus/` as the publication output lane, with `corpus/index.html` as the public table of contents.
 - Use `corpus/exploratory/` for publishable working reports, labs, evidence browsers, and conjecture pressure tests.
@@ -21,14 +22,14 @@ Follow a one-way pipeline:
 - Keep `ingest/` as a temporary intake tray for user-provided files.
 - Keep `WISHLIST.md` or an equivalent source queue for missing, blocked, paywalled, or strategically important sources.
 
-Adapt names to the repository if it already uses different but equivalent folders.
+Adapt names to the repository if it already uses different but equivalent folders. Treat `scratchpad/`, `thoughts/`, `notes/`, or an equivalent project notebook as the same layer as `notebook/`.
 
 ## Start By Reading The Repo
 
 Before changing anything:
 
 1. Inspect the folder structure with `rg --files`, `find`, or existing project docs.
-2. Read local instructions such as `AGENTS.md`, `README.md`, `SKILL.md`, schema files, `raw/README.md`, `wiki/index.md`, `wiki/log.md`, and manifest examples.
+2. Read local instructions such as `AGENTS.md`, `README.md`, `SKILL.md`, schema files, `raw/README.md`, `notebook/README.md`, `wiki/index.md`, `wiki/log.md`, and manifest examples.
 3. Infer existing naming conventions, link syntax, manifest fields, and log style from current files.
 4. Prefer existing patterns over the generic defaults in this skill.
 
@@ -36,6 +37,8 @@ If the repo is new or incomplete, create the smallest useful scaffold:
 
 - `raw/`
 - `raw/manifests/`
+- `notebook/`
+- `notebook/README.md`
 - `wiki/`
 - `wiki/index.md`
 - `wiki/log.md`
@@ -45,6 +48,18 @@ If the repo is new or incomplete, create the smallest useful scaffold:
 - `corpus/exploratory/`
 - `corpus/treatise/`
 - `WISHLIST.md`
+
+## Notebook Workflow
+
+Use the notebook as a deliberately low-friction workbench.
+
+- Put messy, mutable, informal material in `notebook/`: stray observations, half-formed arguments, reading plans, temporary outlines, prompts, conversation notes, false starts, and things the user wants to remember without hardening into the wiki.
+- Prefer lightweight dated or topic files when creating new notebook entries, but do not over-organize it. The folder is allowed to be rough.
+- Do not treat notebook notes as evidence. If a notebook idea matters, connect it back to `raw/`, a manifest, a source page, or a wishlist entry before using it for a strong claim.
+- Do not cite notebook notes in publications as if they were sources. Promote useful material into `wiki/` once it becomes durable synthesis, and cite the underlying evidence there.
+- Preserve the user's voice and intent in personal notes. Clean up, split, or move notebook material only when asked or when promoting selected ideas into the wiki.
+- Search `notebook/` for leads, open questions, and user hunches, but distinguish those from sourced wiki claims.
+- Log only meaningful promotions from `notebook/` into `wiki/`, `WISHLIST.md`, or `corpus/`; routine scribbling does not need a wiki log entry.
 
 ## Raw Source Rules
 

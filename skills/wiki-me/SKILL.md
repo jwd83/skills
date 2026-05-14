@@ -1,6 +1,6 @@
 ---
 name: wiki-me
-description: Build or extend a project wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from your sources. Use when the user wants to start a wiki, add new sources, or synthesize notes into a living knowledge base rather than one-off RAG.
+description: Build or extend a project wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from immutable sources plus an optional freeform notebook or scratchpad. Use when the user wants to start a wiki, add new sources, capture rough project thoughts, or synthesize notes into a living knowledge base rather than one-off RAG.
 ---
 
 A pattern for building project knowledge bases using LLMs.
@@ -28,9 +28,11 @@ This can apply to a lot of different contexts. A few examples:
 
 ## Architecture
 
-There are three layers:
+There are four layers:
 
 **Raw sources** — your curated collection of source documents. Articles, papers, images, data files. These are immutable — the LLM reads from them but never modifies them. This is your source of truth.
+
+**The notebook / scratchpad** — a mutable place for rough thoughts that belong to the project but are not source evidence and are not polished wiki synthesis yet. Use it for stray observations, hunches, outlines, prompts, planning notes, dead ends, and other useful junk. It is intentionally allowed to be messy.
 
 **The wiki** — a directory of LLM-generated markdown files. Summaries, entity pages, concept pages, comparisons, an overview, a synthesis. The LLM owns this layer entirely. It creates pages, updates them when new sources arrive, maintains cross-references, and keeps everything consistent. You read it; the LLM writes it.
 
@@ -40,6 +42,7 @@ There are three layers:
 ## Typical Folder Layout
 
 ./raw/
+./notebook/  (or ./scratchpad/, ./thoughts/, ./notes/)
 ./wiki/
 ./AGENTS.md and/or CLAUDE.md (prefer/default to AGENTS.md)
 
@@ -47,9 +50,11 @@ There are three layers:
 
 **Ingest.** You drop a new source into the raw collection and tell the LLM to process it. An example flow: the LLM reads the source, discusses key takeaways with you, writes a summary page in the wiki, updates the index, updates relevant entity and concept pages across the wiki, and appends an entry to the log. A single source might touch 10-15 wiki pages. Personally I prefer to ingest sources one at a time and stay involved — I read the summaries, check the updates, and guide the LLM on what to emphasize. But you could also batch-ingest many sources at once with less supervision. It's up to you to develop the workflow that fits your style and document it in the schema for future sessions.
 
+**Notebook.** You or the LLM can scribble project-adjacent thoughts into the notebook without needing them to be clean, sourced, or worth indexing yet. The notebook is for thinking in public with yourself: possible connections, "maybe this matters" notes, reading plans, questions to chase later, snippets from conversations, and abandoned paths. The LLM can search it for leads and user intent, but it should not treat notebook material as evidence. When something in the notebook becomes important, the LLM promotes the relevant idea into the wiki with citations to raw sources, or records the missing-evidence part as a sourcing TODO or wishlist entry if the project keeps one.
+
 **Query.** You ask questions against the wiki. The LLM searches for relevant pages, reads them, and synthesizes an answer with citations. Answers can take different forms depending on the question — a markdown page, a comparison table, a slide deck (Marp), a chart (matplotlib), a canvas. The important insight: **good answers can be filed back into the wiki as new pages.** A comparison you asked for, an analysis, a connection you discovered — these are valuable and shouldn't disappear into chat history. This way your explorations compound in the knowledge base just like ingested sources do.
 
-**Lint.** Periodically, ask the LLM to health-check the wiki. Look for: contradictions between pages, stale claims that newer sources have superseded, orphan pages with no inbound links, important concepts mentioned but lacking their own page, missing cross-references, data gaps that could be filled with a web search. The LLM is good at suggesting new questions to investigate and new sources to look for. This keeps the wiki healthy as it grows.
+**Lint.** Periodically, ask the LLM to health-check the wiki. Look for: contradictions between pages, stale claims that newer sources have superseded, orphan pages with no inbound links, important concepts mentioned but lacking their own page, missing cross-references, data gaps that could be filled with a web search. The notebook can be scanned for promising leads during a lint pass, but it should not be linted as if it were supposed to be tidy. This keeps the wiki healthy as it grows without taking away the notebook's freedom to be rough.
 
 ## Indexing and logging
 
