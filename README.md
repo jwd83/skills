@@ -55,6 +55,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 
 | Skill | What it does |
 | --- | --- |
+| [`auto-research-repo`](skills/auto-research-repo/SKILL.md) | Create, audit, maintain, ingest into, query, or draft from cumulative research repositories with raw sources, wiki synthesis, manifests, wishlists, and portable HTML publication lanes |
 | [`clumsy-ms-paint-redraw`](skills/clumsy-ms-paint-redraw/SKILL.md) | Redraw attached images as deliberately clumsy, scribbly MS Paint-style mouse drawings on white backgrounds |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
@@ -82,6 +83,10 @@ Once installed, invoke a skill by its name or by describing what you want:
 ```
 
 ```
+/auto-research-repo
+```
+
+```
 review this pygame game loop
 ```
 
@@ -101,6 +106,7 @@ Redraw the attached image in the most clumsy, scribbly, and utterly pathetic way
 
 ```
 skills/
+  auto-research-repo/SKILL.md
   clumsy-ms-paint-redraw/SKILL.md
   godot-gdscript-patterns/SKILL.md
   grill-me/SKILL.md
