@@ -59,7 +59,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 | [`clumsy-ms-paint-redraw`](skills/clumsy-ms-paint-redraw/SKILL.md) | Redraw attached images as deliberately clumsy, scribbly MS Paint-style mouse drawings on white backgrounds |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
-| [`local-wikipedia-search`](skills/local-wikipedia-search/SKILL.md) | Search and read the local text-only English Wikipedia Kiwix/ZIM mirror |
+| [`local-wikipedia-search`](skills/local-wikipedia-search/SKILL.md) | Search and read Jared's publicly hosted text-only English Wikipedia Kiwix/ZIM mirror at `wiki.ayrscott.com` |
 | [`next-step`](skills/next-step/SKILL.md) | Resume in-progress work, find the next defensible implementation step, make it, and sync docs/tests |
 | [`pygame-patterns`](skills/pygame-patterns/SKILL.md) | Pygame-specific best practices and architecture for game loops, sprites, scenes/states, assets, input, collision, timing, rendering, packaging, and tests |
 | [`refactor-python`](skills/refactor-python/SKILL.md) | Behavior-preserving Python refactoring with attention to PEP 8/257, typing, pytest, uv workflows, packaging, imports, resources, and idiomatic design |

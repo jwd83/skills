@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch a local Kiwix Wikipedia article and print readable plain text."""
+"""Fetch a Kiwix Wikipedia article and print readable plain text."""
 
 from __future__ import annotations
 
@@ -12,8 +12,9 @@ from html.parser import HTMLParser
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
+PUBLIC_BASE_URL = "https://wiki.ayrscott.com"
 ZIM_SLUG = "wikipedia_en_all_nopic_2026-03"
-BASE_URL = os.environ.get("LOCAL_WIKI_URL", "http://127.0.0.1:3081").rstrip("/")
+DEFAULT_BASE_URL = os.environ.get("WIKI_BASE_URL") or os.environ.get("LOCAL_WIKI_URL") or PUBLIC_BASE_URL
 CONTENT_PREFIX = f"/content/{ZIM_SLUG}/"
 
 BLOCK_TAGS = {
@@ -107,14 +108,14 @@ class MainTextExtractor(HTMLParser):
             self.parts.append(data)
 
 
-def article_url(title_or_url: str) -> str:
+def article_url(title_or_url: str, base_url: str) -> str:
     value = title_or_url.strip()
     if value.startswith(("http://", "https://")):
         return value
     if value.startswith(CONTENT_PREFIX):
-        return BASE_URL + value
+        return base_url.rstrip("/") + value
     path_title = value.replace(" ", "_")
-    return f"{BASE_URL}{CONTENT_PREFIX}{quote(path_title, safe='()_,-.')}"
+    return f"{base_url.rstrip('/')}{CONTENT_PREFIX}{quote(path_title, safe='()_,-.')}"
 
 
 def normalize_text(raw: str) -> str:
@@ -138,7 +139,7 @@ def normalize_text(raw: str) -> str:
 
 def fetch_text(url: str) -> str:
     request = Request(url, headers={"User-Agent": "local-wikipedia-search-skill/1.0"})
-    with urlopen(request, timeout=20) as response:
+    with urlopen(request, timeout=30) as response:
         html = response.read().decode("utf-8", "replace")
 
     parser = MainTextExtractor()
@@ -150,13 +151,14 @@ def fetch_text(url: str) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Read a local Kiwix Wikipedia article as text.")
-    parser.add_argument("title_or_url", nargs="+", help="article title, /content path, or full local URL")
+    parser = argparse.ArgumentParser(description="Read a Kiwix Wikipedia article as text.")
+    parser.add_argument("title_or_url", nargs="+", help="article title, /content path, or full URL")
     parser.add_argument("--max-chars", type=int, default=12000, help="maximum characters to print")
+    parser.add_argument("--base-url", default=DEFAULT_BASE_URL, help="wiki base URL; defaults to https://wiki.ayrscott.com or WIKI_BASE_URL")
     args = parser.parse_args()
 
     title_or_url = " ".join(args.title_or_url).strip()
-    url = article_url(title_or_url)
+    url = article_url(title_or_url, args.base_url)
 
     try:
         text = fetch_text(url)
