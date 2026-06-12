@@ -55,6 +55,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 
 | Skill | What it does |
 | --- | --- |
+| [`architectural-review`](skills/architectural-review/SKILL.md) | Whole-project architecture review with metrics, ranked structural risks, and a behavior-preserving remediation plan |
 | [`auto-research-repo`](skills/auto-research-repo/SKILL.md) | Create, audit, maintain, ingest into, query, or draft from cumulative research repositories with raw sources, a freeform notebook, wiki synthesis, manifests, wishlists, and portable HTML publication lanes |
 | [`clumsy-ms-paint-redraw`](skills/clumsy-ms-paint-redraw/SKILL.md) | Redraw attached images as deliberately clumsy, scribbly MS Paint-style mouse drawings on white backgrounds |
 | [`godot-gdscript-patterns`](skills/godot-gdscript-patterns/SKILL.md) | Godot 4 / GDScript patterns — signals, scenes, state machines, optimization |
@@ -122,6 +123,7 @@ skills/
   pygame-patterns/SKILL.md
   refactor-python/SKILL.md
   simplify/SKILL.md
+  architectural-review/SKILL.md
   system-verilog-expert/SKILL.md
   wiki-me/SKILL.md
 ```
