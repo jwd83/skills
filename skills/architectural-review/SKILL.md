@@ -1,6 +1,6 @@
 ---
 name: architectural-review
-description: Create and maintain a whole-project architectural review: a dated markdown assessment with objective metrics, preserved design strengths, ranked structural risks, and a concise behavior-preserving remediation plan. Use for architecture reviews, refactoring strategy, technical-debt assessment, or when resuming work from an existing architectural-review.md.
+description: "Create and maintain a whole-project architectural review: a dated markdown assessment with objective metrics, preserved design strengths, ranked structural risks, and a concise behavior-preserving remediation plan. Use for architecture reviews, refactoring strategy, technical-debt assessment, or when resuming work from an existing architectural-review.md."
 ---
 
 # Architectural Review
