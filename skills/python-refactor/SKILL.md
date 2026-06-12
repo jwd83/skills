@@ -1,5 +1,5 @@
 ---
-name: refactor-python
+name: python-refactor
 description: Standalone Python refactoring skill for behavior-preserving cleanup using Python best practices. Use when refactoring Python packages, scripts, CLIs, tests, async code, data models, or APIs with attention to PEP 8/257, typing, pytest, uv project/dependency management, packaging, imports, resource handling, and idiomatic Python design.
 ---
 

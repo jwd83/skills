@@ -7,7 +7,7 @@ description: Pygame-specific best practices, architecture patterns, and antipatt
 
 ## Purpose
 
-Build, refactor, debug, and review pygame projects using idiomatic Python and pygame-specific practices. Use this skill with `refactor-python` when cleaning up pygame code.
+Build, refactor, debug, and review pygame projects using idiomatic Python and pygame-specific practices. Use this skill with `python-refactor` when cleaning up pygame code.
 
 Optimize for a stable main loop, explicit input/update/draw boundaries, predictable timing, cached assets, testable core logic, and architecture that fits the game's actual size.
 

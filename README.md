@@ -63,7 +63,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 | [`local-wikipedia-search`](skills/local-wikipedia-search/SKILL.md) | Search and read Jared's publicly hosted text-only English Wikipedia Kiwix/ZIM mirror at `wiki.ayrscott.com` |
 | [`next-step`](skills/next-step/SKILL.md) | Resume in-progress work, find the next defensible implementation step, make it, and sync docs/tests |
 | [`pygame-patterns`](skills/pygame-patterns/SKILL.md) | Pygame-specific best practices and architecture for game loops, sprites, scenes/states, assets, input, collision, timing, rendering, packaging, and tests |
-| [`refactor-python`](skills/refactor-python/SKILL.md) | Behavior-preserving Python refactoring with attention to PEP 8/257, typing, pytest, uv workflows, packaging, imports, resources, and idiomatic design |
+| [`python-refactor`](skills/python-refactor/SKILL.md) | Behavior-preserving Python refactoring with attention to PEP 8/257, typing, pytest, uv workflows, packaging, imports, resources, and idiomatic design |
 | [`simplify`](skills/simplify/SKILL.md) | Review recently changed code and simplify it for clarity without changing behavior |
 | [`system-verilog-expert`](skills/system-verilog-expert/SKILL.md) | SystemVerilog / RTL design guidance with synthesis, lint, CDC, and tool-flow-aware patterns |
 | [`wiki-me`](skills/wiki-me/SKILL.md) | Build and maintain a persistent, interlinked markdown wiki from immutable sources plus a freeform notebook |
@@ -81,7 +81,7 @@ Once installed, invoke a skill by its name or by describing what you want:
 ```
 
 ```
-/refactor-python
+/python-refactor
 ```
 
 ```
@@ -121,7 +121,7 @@ skills/
   local-wikipedia-search/scripts/wiki-article.py
   next-step/SKILL.md
   pygame-patterns/SKILL.md
-  refactor-python/SKILL.md
+  python-refactor/SKILL.md
   simplify/SKILL.md
   architectural-review/SKILL.md
   system-verilog-expert/SKILL.md
