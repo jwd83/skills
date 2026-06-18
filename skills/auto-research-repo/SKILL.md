@@ -19,10 +19,8 @@ Follow a one-way pipeline:
 - Keep `docs/public/` as the publication output lane, with `docs/public/index.html` as the public table of contents.
 - Use `docs/public/exploratory/` for publishable working reports, labs, evidence browsers, and conjecture pressure tests.
 - Use `docs/public/treatise/` for mature paper-shaped publications promoted from wiki synthesis, not as the starting point.
-- Keep `plans/in-progress/ingest/` as a temporary intake tray for user-provided files.
+- Keep `ref/inbox/` as a mutable intake tray for user-provided files; files become immutable after they are identified and moved elsewhere under `ref/`.
 - Keep `plans/to-do/sources.md` as the source queue for missing, blocked, paywalled, or strategically important sources.
-
-For new repositories, use these paths exactly. In an existing repository, recognize `raw/`, `notebook/`, `scratchpad/`, `thoughts/`, `notes/`, `wiki/`, `corpus/`, `ingest/`, or `WISHLIST.md` as legacy equivalents. Continue using one established legacy tree unless migration is in scope; never create a second canonical tree beside it.
 
 ## Start By Reading The Repo
 
@@ -31,18 +29,18 @@ Before changing anything:
 1. Inspect the folder structure with `rg --files`, `find`, or existing project docs.
 2. Read local instructions such as `AGENTS.md`, `README.md`, `SKILL.md`, schema files, `ref/README.md`, `plans/notes/notebook/README.md`, `docs/wiki/index.md`, `docs/wiki/log.md`, and manifest examples.
 3. Infer existing naming conventions, link syntax, manifest fields, and log style from current files.
-4. Prefer existing patterns over the generic defaults in this skill.
+4. Follow existing content conventions within the canonical paths.
 
 If the repo is new or incomplete, create the smallest useful scaffold:
 
 - `ref/`
 - `ref/manifests/`
+- `ref/inbox/`
 - `plans/notes/notebook/`
 - `plans/notes/notebook/README.md`
 - `docs/wiki/`
 - `docs/wiki/index.md`
 - `docs/wiki/log.md`
-- `plans/in-progress/ingest/`
 - `docs/public/`
 - `docs/public/index.html`
 - `docs/public/exploratory/`
@@ -85,7 +83,7 @@ For each source batch, update or create a manifest. Include, when available:
 
 ## Ingest Workflow
 
-When files appear in `plans/in-progress/ingest/`:
+When files appear in `ref/inbox/`:
 
 1. Identify each file and its best bibliographic or dataset description.
 2. Rename it according to repo conventions.
@@ -94,9 +92,9 @@ When files appear in `plans/in-progress/ingest/`:
 5. If it satisfies a wishlist entry, mark that entry found with date, final path, and manifest or checksum reference. Preserve the historical search trail.
 6. Update enough wiki pages that the source is discoverable.
 7. Append a dated entry to `docs/wiki/log.md`.
-8. Leave `plans/in-progress/ingest/` empty except for placeholders.
+8. Leave `ref/inbox/` empty after processing.
 
-Ask the user to place manually sourced files into `plans/in-progress/ingest/` when a source is blocked, paywalled, unavailable, or needs human retrieval.
+Ask the user to place manually sourced files into `ref/inbox/` when a source is blocked, paywalled, unavailable, or needs human retrieval.
 
 ## Wiki Workflow
 

@@ -7,7 +7,7 @@ You are an expert at resuming partially complete work and moving it forward by o
 
 Start from the codebase as it exists now, not from stale assumptions. Inspect the relevant implementation, docs, task lists, tests, recent edits, and TODOs before deciding what "next" means.
 
-Resolve durable project artifacts using the shared path contract. Look for active work in `plans/in-progress/`, queued work in `plans/to-do/`, exploratory notes in `plans/notes/`, maintained knowledge in `docs/`, and external reference inputs in `ref/`. Recognize an established legacy equivalent, but do not create a parallel canonical tree during an ordinary implementation step. When starting a queued plan, move it from `plans/to-do/<slug>.md` to `plans/in-progress/<slug>.md`; when completing it, move it to `plans/completed/YYYY-MM-DD-<slug>.md` and update links.
+Use `plans/in-progress/` for active work, `plans/to-do/` for queued work, `plans/notes/` for exploratory notes, `docs/` for maintained knowledge, and `ref/` for references. Move plans through the standard to-do, in-progress, and completed lifecycle.
 
 Your job:
 
