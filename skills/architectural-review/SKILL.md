@@ -1,18 +1,23 @@
 ---
 name: architectural-review
-description: "Create and maintain a whole-project architectural review: a dated markdown assessment with objective metrics, preserved design strengths, ranked structural risks, and a concise behavior-preserving remediation plan. Use for architecture reviews, refactoring strategy, technical-debt assessment, or when resuming work from an existing architectural-review.md."
+description: "Create and maintain a whole-project architectural review under the shared plans lifecycle: a dated markdown assessment with objective metrics, preserved design strengths, ranked structural risks, and a concise behavior-preserving remediation plan. Use for architecture reviews, refactoring strategy, technical-debt assessment, or when resuming an existing architectural review."
 ---
 
 # Architectural Review
 
-Use this skill for project-level architecture and refactoring assessments. The output is a durable `architectural-review.md` that both records the review and guides a short, behavior-preserving improvement campaign.
+Use this skill for project-level architecture and refactoring assessments. The active output is `plans/in-progress/architectural-review.md`; it both records the review and guides a short, behavior-preserving improvement campaign.
 
 There are two modes:
 
-- **Author the review** when no current `architectural-review.md` exists.
+- **Author the review** when no current architectural review exists.
 - **Execute the plan** when the document exists and the user asks to continue, start, or complete a numbered step.
 
-Keep the review at the repository root unless the project already has a clear planning location such as `docs/`, `wiki/` or `plans/`.
+Resolve the review path before working:
+
+1. Prefer `plans/in-progress/architectural-review.md`.
+2. If the repository already has one review at a legacy location such as `architectural-review.md`, `docs/`, `wiki/`, or `plan/`, continue using that file rather than creating a duplicate.
+3. Migrate a legacy review only when the user requests reorganization or the task includes path normalization.
+4. Create new reviews only at the canonical active path.
 
 ## Mode 1: Author the review
 
@@ -29,7 +34,7 @@ Review the repository before making judgments. Record the date, branch, and comm
 
 Prefer measurable findings over impressions. If the project lacks a useful test baseline, call that out as a structural risk and make verification an early plan item.
 
-### Write `architectural-review.md`
+### Write the architectural review
 
 Use this structure:
 
@@ -77,7 +82,7 @@ Stop after delivering the review unless the user explicitly asks you to begin im
 
 Re-establish the current state:
 
-1. Read `architectural-review.md`, including all existing `*Done*` annotations.
+1. Read the resolved architectural-review file, including all existing `*Done*` annotations.
 2. Check the working tree and recent commits.
 3. Re-read the files affected by the selected step.
 4. Run or confirm the relevant test baseline.
@@ -110,4 +115,4 @@ The annotation should let a future session resume cold: what changed, what was v
 
 ## Completing the campaign
 
-When the final step is done, say so in its annotation. Do not extend the old review into an indefinite backlog. If more structural work is needed, create a new review against the new baseline.
+When the final step is done, say so in its annotation. Move a canonically located review to `plans/completed/YYYY-MM-DD-architectural-review.md` and update links to it. Do not leave an active duplicate behind. Preserve an established legacy location unless migration is in scope. Do not extend the old review into an indefinite backlog. If more structural work is needed, create a new review against the new baseline.

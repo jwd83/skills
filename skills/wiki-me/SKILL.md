@@ -1,6 +1,6 @@
 ---
 name: wiki-me
-description: Build or extend a project wiki — a persistent, interlinked markdown knowledge base that the LLM incrementally maintains from immutable sources plus an optional freeform notebook or scratchpad. Use when the user wants to start a wiki, add new sources, capture rough project thoughts, or synthesize notes into a living knowledge base rather than one-off RAG.
+description: Build or extend a project wiki using the shared project paths — a persistent, interlinked Markdown knowledge base under docs/wiki that the LLM incrementally maintains from immutable sources under ref plus optional work notes under plans/notes. Use when the user wants to start a wiki, add new sources, capture rough project thoughts, or synthesize notes into a living knowledge base rather than one-off RAG.
 ---
 
 A pattern for building project knowledge bases using LLMs.
@@ -41,10 +41,14 @@ There are four layers:
 
 ## Typical Folder Layout
 
-./raw/
-./notebook/  (or ./scratchpad/, ./thoughts/, ./notes/)
-./wiki/
-./AGENTS.md and/or CLAUDE.md (prefer/default to AGENTS.md)
+```text
+ref/
+plans/notes/notebook/
+docs/wiki/
+AGENTS.md
+```
+
+Use these canonical paths for a new project. In an existing project, recognize `raw/`, `reference/`, `notebook/`, `scratchpad/`, `thoughts/`, `notes/`, or `wiki/` as legacy equivalents, but keep using one established tree rather than creating a parallel canonical tree. Keep `AGENTS.md` and tool-required control files at the project root.
 
 ## Operations
 
@@ -71,7 +75,7 @@ At some point you may want to build small tools that help the LLM operate on the
 ## Tips and tricks
 
 - **Obsidian Web Clipper** is a browser extension that converts web articles to markdown. Very useful for quickly getting sources into your raw collection.
-- **Download images locally.** In Obsidian Settings → Files and links, set "Attachment folder path" to a fixed directory (e.g. `raw/assets/`). Then in Settings → Hotkeys, search for "Download" to find "Download attachments for current file" and bind it to a hotkey (e.g. Ctrl+Shift+D). After clipping an article, hit the hotkey and all images get downloaded to local disk. This is optional but useful — it lets the LLM view and reference images directly instead of relying on URLs that may break. Note that LLMs can't natively read markdown with inline images in one pass — the workaround is to have the LLM read the text first, then view some or all of the referenced images separately to gain additional context. It's a bit clunky but works well enough.
+- **Download images locally.** In Obsidian Settings → Files and links, set "Attachment folder path" to a fixed directory (e.g. `ref/assets/`). Then in Settings → Hotkeys, search for "Download" to find "Download attachments for current file" and bind it to a hotkey (e.g. Ctrl+Shift+D). After clipping an article, hit the hotkey and all images get downloaded to local disk. This is optional but useful — it lets the LLM view and reference images directly instead of relying on URLs that may break. Note that LLMs can't natively read markdown with inline images in one pass — the workaround is to have the LLM read the text first, then view some or all of the referenced images separately to gain additional context. It's a bit clunky but works well enough.
 - **Obsidian's graph view** is the best way to see the shape of your wiki — what's connected to what, which pages are hubs, which are orphans.
 - **Marp** is a markdown-based slide deck format. Obsidian has a plugin for it. Useful for generating presentations directly from wiki content.
 - **Dataview** is an Obsidian plugin that runs queries over page frontmatter. If your LLM adds YAML frontmatter to wiki pages (tags, dates, source counts), Dataview can generate dynamic tables and lists.

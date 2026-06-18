@@ -62,6 +62,7 @@ Most commands accept `-g` for global (user-level) scope and `-a <agent>` to targ
 | [`grill-me`](skills/grill-me/SKILL.md) | Stress-test a plan or design by interviewing you through every branch of the decision tree |
 | [`local-wikipedia-search`](skills/local-wikipedia-search/SKILL.md) | Search and read Jared's publicly hosted text-only English Wikipedia Kiwix/ZIM mirror at `wiki.ayrscott.com` |
 | [`next-step`](skills/next-step/SKILL.md) | Resume in-progress work, find the next defensible implementation step, make it, and sync docs/tests |
+| [`project-layout`](skills/project-layout/SKILL.md) | Enforce shared paths for durable docs, work plans and notes, immutable references, wikis, and publications |
 | [`pygame-patterns`](skills/pygame-patterns/SKILL.md) | Pygame-specific best practices and architecture for game loops, sprites, scenes/states, assets, input, collision, timing, rendering, packaging, and tests |
 | [`python-refactor`](skills/python-refactor/SKILL.md) | Behavior-preserving Python refactoring with attention to PEP 8/257, typing, pytest, uv workflows, packaging, imports, resources, and idiomatic design |
 | [`simplify`](skills/simplify/SKILL.md) | Review recently changed code and simplify it for clarity without changing behavior |
@@ -120,6 +121,7 @@ skills/
   local-wikipedia-search/scripts/wiki-search.py
   local-wikipedia-search/scripts/wiki-article.py
   next-step/SKILL.md
+  project-layout/SKILL.md
   pygame-patterns/SKILL.md
   python-refactor/SKILL.md
   simplify/SKILL.md
