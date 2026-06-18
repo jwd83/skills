@@ -5,7 +5,7 @@ description: Build or extend a project wiki using the shared project paths — a
 
 A pattern for building project knowledge bases using LLMs.
 
-This is an idea file, it is designed to be copy pasted to your own LLM Agent (e.g. OpenAI Codex, Claude Code, OpenCode / Pi, or etc.). Its goal is to communicate the high level idea, but your agent will build out the specifics in collaboration with you.
+This is an idea file, it is designed to be copy pasted to your own LLM Agent (e.g. OpenAI Codex, Claude Code, OpenCode / Pi, or etc.). Its goal is to communicate the high level idea: the project paths below are fixed, but your agent will build out everything else — schema, formats, and tooling — in collaboration with you.
 
 
 ## The core idea
@@ -48,7 +48,7 @@ docs/wiki/
 AGENTS.md
 ```
 
-Use these paths. Keep `AGENTS.md` and tool-required control files at the project root.
+Use these paths. On an existing project, recognize legacy equivalents per `project-layout` and keep using the established tree rather than creating a parallel one. Keep `AGENTS.md` and tool-required control files at the project root.
 
 ## Operations
 
@@ -92,4 +92,4 @@ The idea is related in spirit to Vannevar Bush's Memex (1945) — a personal, cu
 
 ## Note
 
-Keep the path layout fixed. Adapt the schema, page formats, tooling, and optional outputs to the domain.
+Keep the path layout fixed. Everything else — schema, page formats, tooling, and optional outputs — is modular; pick what's useful and adapt it to your domain.

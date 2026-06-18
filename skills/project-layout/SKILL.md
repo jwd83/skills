@@ -17,11 +17,28 @@ Treat all paths as relative to the project root, normally the Git worktree root.
 | `plans/completed/` | Finished plans retained as history. |
 | `plans/notes/` | Exploratory notes, notebooks, and long-term guidance. |
 | `ref/` | Immutable external sources and reference inputs. |
-| `ref/inbox/` | Mutable staging for sources awaiting placement under `ref/`. |
+| `ref/inbox/` | The one mutable lane under `ref/`: staging for sources awaiting placement. Files become immutable once moved into `ref/`. |
 
 Keep tool-required files such as `README.md`, `AGENTS.md`, `CLAUDE.md`, `LICENSE`, and ecosystem configuration at the root.
 
 Source paths such as `src/`, `tests/`, package assets, repository utilities, and files inside an installed skill follow their own ecosystem conventions.
+
+When a skill creates a durable project artifact, place it under these paths.
+
+## Legacy Equivalents
+
+Use the canonical paths for new work. On an existing project, recognize these legacy names and keep using one established tree rather than creating a parallel canonical one. Migrate only when the user asks or the task includes reorganization; never split one artifact class across canonical and legacy paths.
+
+| Legacy path | Canonical destination |
+| --- | --- |
+| `doc/` | `docs/` |
+| `wiki/` | `docs/wiki/` |
+| `corpus/` | `docs/public/` |
+| `plan/` | `plans/` |
+| `todos/`, `tasks/`, `plans/todos/` | `plans/to-do/` |
+| `notebook/`, `scratchpad/`, `thoughts/`, `notes/` | `plans/notes/` |
+| `raw/`, `reference/` | `ref/` |
+| `ingest/` | `ref/inbox/` |
 
 ## Plan Lifecycle
 

@@ -1,6 +1,6 @@
 ---
 name: auto-research-repo
-description: Create, audit, maintain, ingest into, query, or draft from an auto-research repository using the shared project paths for immutable references, work notes, an LLM-maintained wiki, manifests, temporary ingest, a source wishlist, and portable HTML publications. Use when Codex needs to author a new research repo, clean up repo instructions, process newly provided sources, capture rough project thoughts, consolidate research notes, turn evidence into wiki pages, create exploratory publications, or move mature wiki synthesis toward a treatise.
+description: Create, audit, maintain, ingest into, query, or draft from an auto-research repository using the shared project paths for immutable references, work notes, an LLM-maintained wiki, manifests, inbox staging, a source wishlist, and portable HTML publications. Use when Codex needs to author a new research repo, clean up repo instructions, process newly provided sources, capture rough project thoughts, consolidate research notes, turn evidence into wiki pages, create exploratory publications, or move mature wiki synthesis toward a treatise.
 ---
 
 # Auto-Research Repo
@@ -21,6 +21,8 @@ Follow a one-way pipeline:
 - Use `docs/public/treatise/` for mature paper-shaped publications promoted from wiki synthesis, not as the starting point.
 - Keep `ref/inbox/` as a mutable intake tray for user-provided files; files become immutable after they are identified and moved elsewhere under `ref/`.
 - Keep `plans/to-do/sources.md` as the source queue for missing, blocked, paywalled, or strategically important sources.
+
+In an existing repository, recognize legacy equivalents per `project-layout` and keep using one established tree rather than creating a parallel one.
 
 ## Start By Reading The Repo
 

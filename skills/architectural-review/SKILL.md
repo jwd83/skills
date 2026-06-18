@@ -12,7 +12,7 @@ There are two modes:
 - **Author the review** when no current architectural review exists.
 - **Execute the plan** when the document exists and the user asks to continue, start, or complete a numbered step.
 
-Read and write the review at `plans/in-progress/architectural-review.md`.
+Read and write the review at `plans/in-progress/architectural-review.md`. If the repo already keeps a review at a legacy location, continue using that file rather than duplicating it (see `project-layout`); migrate only when reorganization is in scope.
 
 ## Mode 1: Author the review
 
@@ -110,4 +110,4 @@ The annotation should let a future session resume cold: what changed, what was v
 
 ## Completing the campaign
 
-When the final step is done, say so in its annotation. Move the review to `plans/completed/YYYY-MM-DD-architectural-review.md` and update links to it. Do not leave an active duplicate behind or extend the old review into an indefinite backlog. If more structural work is needed, create a new review against the new baseline.
+When the final step is done, say so in its annotation. Move the review to `plans/completed/YYYY-MM-DD-architectural-review.md` (preserve an established legacy location unless migration is in scope) and update links to it. Do not leave an active duplicate behind or extend the old review into an indefinite backlog. If more structural work is needed, create a new review against the new baseline.

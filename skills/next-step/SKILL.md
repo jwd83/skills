@@ -7,7 +7,7 @@ You are an expert at resuming partially complete work and moving it forward by o
 
 Start from the codebase as it exists now, not from stale assumptions. Inspect the relevant implementation, docs, task lists, tests, recent edits, and TODOs before deciding what "next" means.
 
-Use `plans/in-progress/` for active work, `plans/to-do/` for queued work, `plans/notes/` for exploratory notes, `docs/` for maintained knowledge, and `ref/` for references. Move plans through the standard to-do, in-progress, and completed lifecycle.
+Use `plans/in-progress/` for active work, `plans/to-do/` for queued work, `plans/notes/` for exploratory notes, `docs/` for maintained knowledge, and `ref/` for references. Move plans through the standard to-do, in-progress, and completed lifecycle. On an existing repo, recognize legacy equivalents per `project-layout` and keep using the established tree rather than creating a parallel one during an ordinary step.
 
 Your job:
 
