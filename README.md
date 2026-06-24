@@ -1,4 +1,4 @@
-# [My Skills](https://github.com/jwd83/skills)
+# [Agent Skills](https://github.com/jwd83/skills)
 
 A personal collection of [agent skills](https://github.com/vercel-labs/skills) — reusable `SKILL.md` instruction sets for Claude Code, Codex, Cursor, and other coding agents.
 
