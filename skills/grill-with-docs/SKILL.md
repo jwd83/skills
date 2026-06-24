@@ -11,45 +11,56 @@ If a question can be answered by exploring the codebase, explore the codebase in
 
 # Domain Modeling
 
-Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* `CONTEXT.md` for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
+Actively build and sharpen the project's domain model as you design. This is the *active* discipline — challenging terms, inventing edge-case scenarios, and writing the glossary and decisions down the moment they crystallise. (Merely *reading* a context file for vocabulary is not this skill — that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
 ## File structure
+
+Treat domain-model files as durable project documentation. For new work, follow `project-layout`: put context files under `docs/domain/`, ADRs under `docs/adr/`, and keep root files only for tool-required controls such as `AGENTS.md` or ecosystem configuration.
 
 Most repos have a single context:
 
 ```
 /
-├── CONTEXT.md
 ├── docs/
+│   ├── domain/
+│   │   └── CONTEXT.md
 │   └── adr/
 │       ├── 0001-event-sourced-orders.md
 │       └── 0002-postgres-for-write-model.md
 └── src/
 ```
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+If a `docs/domain/CONTEXT-MAP.md` exists, the repo has multiple contexts. The map points to where each one lives:
 
 ```
 /
-├── CONTEXT-MAP.md
 ├── docs/
-│   └── adr/                          ← system-wide decisions
+│   ├── domain/
+│   │   ├── CONTEXT-MAP.md
+│   │   ├── ordering/
+│   │   │   └── CONTEXT.md
+│   │   └── billing/
+│   │       └── CONTEXT.md
+│   └── adr/
+│       ├── 0001-system-wide-decision.md
+│       ├── ordering/
+│       │   └── 0001-ordering-decision.md
+│       └── billing/
+│           └── 0001-billing-decision.md
 ├── src/
 │   ├── ordering/
-│   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
 │   └── billing/
-│       ├── CONTEXT.md
-│       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create files lazily — only when you have something to write. If no context file exists, create `docs/domain/CONTEXT.md` when the first term is resolved. If no ADR directory exists, create the relevant `docs/adr/` directory when the first ADR is needed.
+
+On an existing repo, recognize legacy root files such as `CONTEXT.md` and `CONTEXT-MAP.md`, or legacy context-local ADR directories, and keep using the established tree rather than creating a parallel canonical one. Migrate only when the user asks or the task includes reorganization.
 
 ## During the session
 
 ### Challenge against the glossary
 
-When the user uses a term that conflicts with the existing language in `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
+When the user uses a term that conflicts with the existing language in the relevant context file, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
 
 ### Sharpen fuzzy language
 
@@ -63,11 +74,11 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-### Update CONTEXT.md inline
+### Update context files inline
 
-When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format:
+When a term is resolved, update the relevant `docs/domain/.../CONTEXT.md` file right there. Don't batch these up — capture them as they happen. Use the format:
 
-# CONTEXT.md Format
+# Context file format
 
 ## Structure
 
@@ -100,18 +111,18 @@ _Avoid_: Client, buyer, account
 
 ## Single vs multi-context repos
 
-**Single context (most repos):** One `CONTEXT.md` at the repo root.
+**Single context (most repos):** One `docs/domain/CONTEXT.md`.
 
-**Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
+**Multiple contexts:** A `docs/domain/CONTEXT-MAP.md` lists the contexts, where they live, and how they relate to each other:
 
 ```md
 # Context Map
 
 ## Contexts
 
-- [Ordering](./src/ordering/CONTEXT.md) — receives and tracks customer orders
-- [Billing](./src/billing/CONTEXT.md) — generates invoices and processes payments
-- [Fulfillment](./src/fulfillment/CONTEXT.md) — manages warehouse picking and shipping
+- [Ordering](./ordering/CONTEXT.md) — receives and tracks customer orders
+- [Billing](./billing/CONTEXT.md) — generates invoices and processes payments
+- [Fulfillment](./fulfillment/CONTEXT.md) — manages warehouse picking and shipping
 
 ## Relationships
 
@@ -122,13 +133,14 @@ _Avoid_: Client, buyer, account
 
 The skill infers which structure applies:
 
-- If `CONTEXT-MAP.md` exists, read it to find contexts
-- If only a root `CONTEXT.md` exists, single context
-- If neither exists, create a root `CONTEXT.md` lazily when the first term is resolved
+- If `docs/domain/CONTEXT-MAP.md` exists, read it to find contexts
+- If `docs/domain/CONTEXT.md` exists, use the single context
+- If legacy root `CONTEXT-MAP.md` or `CONTEXT.md` exists, keep using that established structure
+- If neither exists, create `docs/domain/CONTEXT.md` lazily when the first term is resolved
 
 When multiple contexts exist, infer which one the current topic relates to. If unclear, ask.
 
-`CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
+Context files should be totally devoid of implementation details. Do not treat them as specs, scratch pads, or repositories for implementation decisions. They are glossaries and nothing else.
 
 ### Offer ADRs sparingly
 
@@ -142,9 +154,9 @@ If any of the three is missing, skip the ADR. Use the format:
 
 # ADR Format
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc. Use `docs/adr/` for system-wide decisions and `docs/adr/<context-slug>/` for context-specific decisions.
 
-Create the `docs/adr/` directory lazily — only when the first ADR is needed.
+Create the relevant `docs/adr/` directory lazily — only when the first ADR is needed.
 
 ## Template
 
@@ -166,7 +178,7 @@ Only include these when they add genuine value. Most ADRs won't need them.
 
 ## Numbering
 
-Scan `docs/adr/` for the highest existing number and increment by one.
+Scan the target ADR directory for the highest existing number and increment by one.
 
 ## When to offer an ADR
 
